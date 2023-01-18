@@ -21,7 +21,7 @@ class _TodoScreenState extends State<TodoScreen> {
             Icons.search,
           ),
         ],
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blueGrey,
       ),
       body: Container(
         color: Colors.blueGrey.shade100,
@@ -67,29 +67,13 @@ class _TodoScreenState extends State<TodoScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            const NewEditTodo(),
+                                            const NewEditTodo(
+                                          isEdit: true,
+                                        ),
                                       ),
                                     ),
                                 child: const Icon(Icons.more_vert)),
                           ],
-                        ),
-                      );
-
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        selectedTileColor: Colors.orange[100],
-                        selected: onCheck,
-                        title: Text('Title'),
-                        trailing: Icon(Icons.more_vert),
-                        leading: Checkbox(
-                          value: onCheck,
-                          onChanged: (value) {
-                            setState(() {
-                              onCheck = !onCheck;
-                            });
-                          },
                         ),
                       );
                     }),
@@ -97,6 +81,18 @@ class _TodoScreenState extends State<TodoScreen> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const NewEditTodo(
+              isEdit: false,
+            ),
+          ),
+        ),
+        child: Center(child: Icon(Icons.add)),
+        backgroundColor: Colors.blueGrey,
       ),
     );
   }
