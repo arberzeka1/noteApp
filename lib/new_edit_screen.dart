@@ -17,10 +17,10 @@ class _NewEditTodoState extends State<NewEditTodo> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isEdit ? "Edit Note" : 'New Note'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: const Color(0xFF1D2A64),
       ),
       body: Container(
-        color: Colors.blueGrey.shade100,
+        color: const Color(0xFFE6EAF2),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -33,39 +33,49 @@ class _NewEditTodoState extends State<NewEditTodo> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-
-                    labelText: widget.isEdit ? "Edit Note" : 'New Note',
-                    labelStyle: const TextStyle(color: Colors.blueGrey),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1.5, color: Colors.blueGrey),
-                      borderRadius: BorderRadius.circular(10),
+                  labelText: widget.isEdit ? "Edit Note" : 'New Note',
+                  labelStyle: const TextStyle(
+                    color: Color(
+                      0xFF1D2A64,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1.5, color: Colors.blueGrey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1.5,
+                      color: Color(0xFF1D2A64),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1.5,
+                      color: Color(0xFF1D2A64),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 40,
               ),
               Center(
                 child: GestureDetector(
-                  onTap: (){},
+                  onTap: () {},
                   child: Container(
                     height: 50,
                     width: MediaQuery.of(context).size.width * 0.7,
                     decoration: BoxDecoration(
-                        color: Colors.blueGrey,
-                        borderRadius: BorderRadius.circular(10)),
+                      color: const Color(0xFF1D2A64),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: const Center(
                       child: Text(
                         'Save Note',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
