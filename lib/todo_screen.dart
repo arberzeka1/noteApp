@@ -13,6 +13,21 @@ class TodoScreen extends StatefulWidget {
 class _TodoScreenState extends State<TodoScreen> {
   bool onCheck = false;
 
+  void handleClick(String value) {
+      if(value == 'Edit'){Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+          const NewEditTodo(
+            isEdit: true,
+          ),
+        ),
+      );}
+      else if(value == 'Delete'){}
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,15 +150,15 @@ class _TodoScreenState extends State<TodoScreen> {
                 (BuildContext context, int index) {
                   return Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 30.0,
-                      vertical: 7.0,
+                      horizontal: 20.0,
+                      vertical: 10.0,
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey.shade400,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      height: 70,
+                      // height: 80,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -157,20 +172,46 @@ class _TodoScreenState extends State<TodoScreen> {
                                   });
                                 },
                               ),
-                              const Text('todo TEXT'),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const NewEditTodo(
-                                  isEdit: true,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical:20.0),
+                                child: Column(
+                                  children: [
+
+                                    Text(
+                                      'Title',
+                                      style: GoogleFonts.lato(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF1D2A64),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      'Body',
+                                      style: GoogleFonts.lato(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF1D2A64),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            child: const Icon(Icons.more_vert),
+                            ],
+                          ),
+                          PopupMenuButton<String>(
+                            icon:const Icon( Icons.more_vert),
+                            onSelected: handleClick,
+                            itemBuilder: (BuildContext context) {
+                              return {'Edit', 'Delete'}.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
                           ),
                         ],
                       ),
