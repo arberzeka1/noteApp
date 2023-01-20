@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_app/bloc/notes_bloc.dart';
+import 'package:note_app/bloc/notes_events.dart';
+import 'package:note_app/model/note_model_hive.dart';
 import 'package:note_app/new_edit_screen.dart';
-import 'package:note_app/search_views.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({Key? key}) : super(key: key);
 
   @override
-  _TodoScreenState createState() => _TodoScreenState();
+  State<TodoScreen> createState() => _TodoScreenState();
 }
 
 class _TodoScreenState extends State<TodoScreen> {
-  bool onCheck = false;
+  String? keyword;
 
-  void handleClick(String value) {
-      if(value == 'Edit'){Navigator.push(
+  void handleClick(String value, NoteModelHive note) {
+    if (value == 'Edit') {
+      Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) =>
-          const NewEditTodo(
-            isEdit: true,
-          ),
+          builder: (BuildContext context) => NewEditTodo(note: note),
         ),
-      );}
-      else if(value == 'Delete'){}
-
+      );
+    } else if (value == 'Delete') {
+      context.read<NotesBloc>().add(DeleteNoteEvent(note: note));
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
+    List<NoteModelHive> notes = context.watch<NotesBloc>().state.notes;
+    if (keyword != null && keyword?.isNotEmpty == true) {
+      notes =
+          notes.where((element) => element.header.contains(keyword!)).toList();
+    }
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -55,50 +61,48 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
             //TODOS Search
             SliverToBoxAdapter(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchPage(),
+              child: Container(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                ),
+                margin: const EdgeInsets.all(26.0),
+                height: MediaQuery.of(context).size.height / 20,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE6EAF2),
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                child: Stack(
+                  children: [
+                    TextField(
+                      onChanged: (value) {
+                        setState(() => keyword = value);
+                      },
+                      decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        hintText: "Search by title",
+                        hintStyle: GoogleFonts.lato(
+                          color: const Color(0xFFD2D9DF),
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      style: GoogleFonts.lato(
+                        color: const Color(0xFF1D2A64),
+                        fontSize: 16.0,
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                  ),
-                  margin: const EdgeInsets.all(26.0),
-                  height: MediaQuery.of(context).size.height / 20,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE6EAF2),
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Search by title",
-                          style: GoogleFonts.lato(
-                            color: const Color(0xFFD2D9DF),
-                            fontSize: 16.0,
-                          ),
-                        ),
+                    const Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Icon(
+                        Icons.search,
+                        color: Color(0xFFD2D9DF),
                       ),
-                      const Positioned(
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: Icon(
-                          Icons.search,
-                          color: Color(0xFFD2D9DF),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -118,7 +122,7 @@ class _TodoScreenState extends State<TodoScreen> {
                         ),
                         child: Center(
                           child: Text(
-                            "4 Notes",
+                            "${notes.length} Notes",
                             style: GoogleFonts.lato(
                               color: Colors.white,
                               fontSize: 18.0,
@@ -148,6 +152,7 @@ class _TodoScreenState extends State<TodoScreen> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
+                  final NoteModelHive note = notes[index];
                   return Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20.0,
@@ -165,20 +170,24 @@ class _TodoScreenState extends State<TodoScreen> {
                           Row(
                             children: [
                               Checkbox(
-                                value: onCheck,
+                                value: note.isChecked,
                                 onChanged: (value) {
-                                  setState(() {
-                                    onCheck = !onCheck;
-                                  });
+                                  context.read<NotesBloc>().add(
+                                        EditNoteEvent(
+                                          note: note.copyWith(
+                                            isChecked: value,
+                                          ),
+                                        ),
+                                      );
                                 },
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical:20.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20.0),
                                 child: Column(
                                   children: [
-
                                     Text(
-                                      'Title',
+                                      note.header,
                                       style: GoogleFonts.lato(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w700,
@@ -189,7 +198,7 @@ class _TodoScreenState extends State<TodoScreen> {
                                       height: 10,
                                     ),
                                     Text(
-                                      'Body',
+                                      note.body,
                                       style: GoogleFonts.lato(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w500,
@@ -202,8 +211,9 @@ class _TodoScreenState extends State<TodoScreen> {
                             ],
                           ),
                           PopupMenuButton<String>(
-                            icon:const Icon( Icons.more_vert),
-                            onSelected: handleClick,
+                            icon: const Icon(Icons.more_vert),
+                            onSelected: (String value) =>
+                                handleClick(value, note),
                             itemBuilder: (BuildContext context) {
                               return {'Edit', 'Delete'}.map((String choice) {
                                 return PopupMenuItem<String>(
@@ -218,7 +228,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     ),
                   );
                 },
-                childCount: 3,
+                childCount: notes.length,
               ),
             ),
           ],
@@ -228,15 +238,13 @@ class _TodoScreenState extends State<TodoScreen> {
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => const NewEditTodo(
-              isEdit: false,
-            ),
+            builder: (BuildContext context) => const NewEditTodo(),
           ),
         ),
-        child: Center(
+        child: const Center(
           child: Icon(Icons.add),
         ),
-        backgroundColor: Color(0xFF1D2A64),
+        backgroundColor: const Color(0xFF1D2A64),
       ),
     );
   }
