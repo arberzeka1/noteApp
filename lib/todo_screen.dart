@@ -46,7 +46,10 @@ class _TodoScreenState extends State<TodoScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(26),
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      left: 26,
+                    ),
                     child: Text(
                       "My Notes",
                       style: GoogleFonts.lato(
@@ -59,7 +62,6 @@ class _TodoScreenState extends State<TodoScreen> {
                 ],
               ),
             ),
-            //TODOS Search
             SliverToBoxAdapter(
               child: Container(
                 padding: const EdgeInsets.only(
@@ -114,8 +116,8 @@ class _TodoScreenState extends State<TodoScreen> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(top: 15.0, right: 26.0),
-                        height: MediaQuery.of(context).size.height / 11,
-                        width: MediaQuery.of(context).size.height / 4,
+                        height: MediaQuery.of(context).size.height / 15,
+                        width: MediaQuery.of(context).size.height / 5,
                         decoration: BoxDecoration(
                           color: const Color(0xFF1D2A64),
                           borderRadius: BorderRadius.circular(18.0),
@@ -160,7 +162,9 @@ class _TodoScreenState extends State<TodoScreen> {
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade400,
+                        color: note.isChecked == true
+                            ? Colors.grey.shade400
+                            : const Color(0xFF1D2A64),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       // height: 80,
@@ -171,6 +175,10 @@ class _TodoScreenState extends State<TodoScreen> {
                             children: [
                               Checkbox(
                                 value: note.isChecked,
+                                checkColor: Colors.white,
+                                activeColor: const Color(0xFF1D2A64),
+                                side: const BorderSide(
+                                    color: Colors.white, width: 1.5),
                                 onChanged: (value) {
                                   context.read<NotesBloc>().add(
                                         EditNoteEvent(
@@ -185,13 +193,14 @@ class _TodoScreenState extends State<TodoScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 20.0),
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       note.header,
                                       style: GoogleFonts.lato(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF1D2A64),
+                                        color: Colors.white,
                                       ),
                                     ),
                                     const SizedBox(
@@ -202,7 +211,18 @@ class _TodoScreenState extends State<TodoScreen> {
                                       style: GoogleFonts.lato(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w500,
-                                        color: const Color(0xFF1D2A64),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      note.lastUpdated,
+                                      style: GoogleFonts.lato(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
@@ -211,7 +231,10 @@ class _TodoScreenState extends State<TodoScreen> {
                             ],
                           ),
                           PopupMenuButton<String>(
-                            icon: const Icon(Icons.more_vert),
+                            icon: const Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ),
                             onSelected: (String value) =>
                                 handleClick(value, note),
                             itemBuilder: (BuildContext context) {
@@ -241,10 +264,10 @@ class _TodoScreenState extends State<TodoScreen> {
             builder: (BuildContext context) => const NewEditTodo(),
           ),
         ),
+        backgroundColor: Colors.green,
         child: const Center(
           child: Icon(Icons.add),
         ),
-        backgroundColor: const Color(0xFF1D2A64),
       ),
     );
   }
