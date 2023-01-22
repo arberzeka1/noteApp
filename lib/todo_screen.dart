@@ -142,9 +142,9 @@ class _TodoScreenState extends State<TodoScreen> {
               child: Container(
                 padding: const EdgeInsets.all(26.0),
                 child: Text(
-                  "Most Recent Notes",
+                  "All Notes",
                   style: GoogleFonts.lato(
-                    fontSize: 18.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                     color: const Color(0xFF1D2A64),
                   ),
@@ -163,7 +163,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: note.isChecked == true
-                            ? Colors.grey.shade400
+                            ? const Color(0xffCADCFC)
                             : const Color(0xFF1D2A64),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -257,16 +257,19 @@ class _TodoScreenState extends State<TodoScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const NewEditTodo(),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 4.0),
+        child: FloatingActionButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const NewEditTodo(),
+            ),
           ),
-        ),
-        backgroundColor: Colors.green,
-        child: const Center(
-          child: Icon(Icons.add),
+          backgroundColor: const Color(0xffE87A5D),
+          child: const Center(
+            child: Icon(Icons.add),
+          ),
         ),
       ),
     );

@@ -179,10 +179,10 @@ class _NewEditTodoState extends State<NewEditTodo> {
                         color: const Color(0xFF1D2A64),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Center(
+                      child:  Center(
                         child: Text(
-                          'Save Note',
-                          style: TextStyle(
+                          widget.note != null  ? 'Update Note' : 'Save Note',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
