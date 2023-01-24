@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:note_app/bloc/notes_bloc.dart';
 import 'package:note_app/bloc/notes_events.dart';
 import 'package:note_app/model/note_model_hive.dart';
@@ -29,9 +30,22 @@ class _TodoScreenState extends State<TodoScreen> {
     }
   }
 
+  String getDateTime(int dt) {
+    var formatterDate = DateFormat.yMd().add_jm();
+    String date = formatterDate
+        .format(DateTime.fromMicrosecondsSinceEpoch(dt * 1000))
+        .toString();
+    return date;
+  }
+
   @override
   Widget build(BuildContext context) {
     List<NoteModelHive> notes = context.watch<NotesBloc>().state.notes;
+    notes.sort((a, b) {
+      var first = a.lastUpdated;
+      var second = b.lastUpdated;
+      return -first.compareTo(second);
+    });
     if (keyword != null && keyword?.isNotEmpty == true) {
       notes =
           notes.where((element) => element.header.contains(keyword!)).toList();
@@ -218,7 +232,7 @@ class _TodoScreenState extends State<TodoScreen> {
                                       height: 10,
                                     ),
                                     Text(
-                                      note.lastUpdated,
+                                      getDateTime(note.lastUpdated),
                                       style: GoogleFonts.lato(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w500,

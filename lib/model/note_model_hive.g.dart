@@ -18,7 +18,7 @@ class NoteModelHiveAdapter extends TypeAdapter<NoteModelHive> {
     };
     return NoteModelHive(
       id: fields[0] as String,
-      lastUpdated: fields[1] as String,
+      lastUpdated: fields[1] as int,
       isChecked: fields[2] as bool,
       body: fields[4] as String,
       header: fields[3] as String,
@@ -59,7 +59,7 @@ class NoteModelHiveAdapter extends TypeAdapter<NoteModelHive> {
 NoteModelHive _$NoteModelHiveFromJson(Map<String, dynamic> json) =>
     NoteModelHive(
       id: json['id'] as String,
-      lastUpdated: json['last_updated'] as String,
+      lastUpdated: json['last_updated'] as int,
       isChecked: json['is_checked'] as bool,
       body: json['body'] as String,
       header: json['header'] as String,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:note_app/bloc/notes_bloc.dart';
 import 'package:note_app/bloc/notes_events.dart';
 import 'package:note_app/model/note_model_hive.dart';
@@ -31,20 +30,11 @@ class _NewEditTodoState extends State<NewEditTodo> {
     super.initState();
   }
 
-  String getDateTime() {
-    DateTime now = DateTime.now();
-    var formatterDate = DateFormat.yMMMMd('en_US');
-    var formatterTime = DateFormat.jm();
-    String date = formatterDate.format(now).toString();
-    String time = formatterTime.format(now).toString();
-    return "$date - $time";
-  }
-
   void _onSave() {
     if (_formKey.currentState!.validate()) {
       final NoteModelHive note = NoteModelHive(
         id: widget.note?.id ?? const Uuid().v4(),
-        lastUpdated: getDateTime(),
+        lastUpdated: DateTime.now().millisecondsSinceEpoch,
         isChecked: widget.note?.isChecked ?? false,
         body: _bodyController.text,
         header: _titleController.text,

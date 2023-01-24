@@ -12,7 +12,7 @@ class NoteModelHive extends HiveObject {
 
   @HiveField(1)
   @JsonKey(name: "last_updated")
-  String lastUpdated;
+  int lastUpdated;
 
   @HiveField(2)
   @JsonKey(name: "is_checked")
